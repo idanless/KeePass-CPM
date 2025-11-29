@@ -24,7 +24,7 @@
 
   <h2>Screenshots</h2>
   <p><!-- Screenshot 1 — login form / extension popup --></p>
-  <img src="screenshots/u1.png" alt="Login form with KeePass‑CPM button" style="max-width:100%;"/>
+  <img src="[screenshots/u1.png](https://github.com/idanless/KeePass-CPM/blob/main/screenshots/UI1.png?raw=true)" alt="Login form with KeePass‑CPM button" style="max-width:100%;"/>
 
   <p><!-- Screenshot 2 — account selection or multiple‑account list --></p>
   <img src="screenshotsu2.png" alt="Credential selection popup" style="max-width:100%;"/>
