@@ -105,6 +105,6 @@ Chrome → Extension → Flask Backend → KeePass Database
   <hr />
 
   <h2>License</h2>
-  <p>MIT — do whatever you want with it.</p>
+  <p>MIT </p>
 </body>
 </html>
