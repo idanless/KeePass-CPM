@@ -1,0 +1,4 @@
+Flask>=2.3.2
+pykeepass>=1.0.2
+Flask-Cors>=3.0.10
+cryptography>=41.0.2
