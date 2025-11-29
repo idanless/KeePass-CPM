@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>KeePass‑CPM</title>
 </head>
 <body>
   <h1>KeePass‑CPM</h1>
