@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KeePass Password Manager</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 360px;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h2 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .header .subtitle {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .status {
+      padding: 15px 20px;
+      text-align: center;
+      font-weight: 500;
+      border-bottom: 1px solid #e0e0e0;
+      background: white;
+    }
+
+    .status.locked {
+      background: #FFEBEE;
+      color: #C62828;
+    }
+
+    .status.unlocked {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .status.disconnected {
+      background: #FFF3E0;
+      color: #E65100;
+    }
+
+    .content {
+      padding: 20px;
+      background: white;
+    }
+
+    /* Setup Instructions Section */
+    .setup-section {
+      background: #E3F2FD;
+      border: 2px solid #2196F3;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .setup-section h3 {
+      color: #1565C0;
+      margin-bottom: 15px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .setup-section p {
+      color: #424242;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      font-size: 13px;
+    }
+
+    .setup-steps {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .setup-steps h4 {
+      margin-bottom: 10px;
+      color: #1565C0;
+    }
+
+    .setup-steps ol {
+      margin-left: 20px;
+      color: #424242;
+      font-size: 13px;
+    }
+
+    .setup-steps li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .setup-steps code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #d32f2f;
+      white-space: nowrap;
+    }
+
+    .setup-steps a {
+      color: #2196F3;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .setup-steps a:hover {
+      text-decoration: underline;
+    }
+
+    .check-connection-btn {
+      width: 100%;
+      padding: 12px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+
+    .check-connection-btn:hover {
+      background: #1976D2;
+    }
+
+    .connection-status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 12px;
+      display: none;
+    }
+
+    .connection-status.checking {
+      background: #FFF3E0;
+      color: #E65100;
+      display: block;
+    }
+
+    .connection-status.success {
+      background: #E8F5E9;
+      color: #2E7D32;
+      display: block;
+    }
+
+    .connection-status.error {
+      background: #FFEBEE;
+      color: #C62828;
+      display: block;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+      /* Prevent accidental focus/tab — we only allow mouse/touch */
+      outline: none;
+    }
+
+    button:hover:not(:disabled) {
+      background: #45a049;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    .lock-btn {
+      background: #f44336;
+      margin-top: 10px;
+    }
+
+    .lock-btn:hover:not(:disabled) {
+      background: #da190b;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .message.error {
+      background: #FFEBEE;
+      color: #C62828;
+    }
+
+    .message.success {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .info {
+      margin-top: 15px;
+      padding: 12px;
+      background: #E3F2FD;
+      border-left: 3px solid #2196F3;
+      font-size: 12px;
+      color: #1976D2;
+      line-height: 1.5;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #2196F3;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .github-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Small usability tweak: focus rings only for real keyboard users (if ever enabled) */
+    :focus-visible {
+      outline: 2px solid #2196F3;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Chrome Password Manager KeePass</h2>
+    <div class="subtitle">by idan less</div>
+  </div>
+
+  <div id="status" class="status disconnected">
+    ⚠️ Backend Not Connected
+  </div>
+
+  <div class="content">
+    <!-- Setup Instructions Section -->
+    <div id="setupInstructions" style="display: none;">
+      <div class="setup-section">
+        <h3>
+          <span>⚙️</span>
+          <span>Setup Required</span>
+        </h3>
+
+        <p>
+          This extension requires a local backend server to connect to your KeePass database.
+        </p>
+
+        <div class="setup-steps">
+          <h4>Quick Setup Guide:</h4>
+          <ol>
+            <li>
+              Download the backend from
+              <a href="https://github.com/idanless/keepassPasswordManagerextension" target="_blank" class="github-link">
+                GitHub →
+              </a>
+            </li>
+            <li>
+              Install Python dependencies:<br>
+              <code>pip install flask flask-cors pykeepass</code>
+            </li>
+            <li>
+              Run the backend server:<br>
+              <code>python backend.py</code>
+            </li>
+            <li>
+              Click the button below to verify connection.
+            </li>
+          </ol>
+        </div>
+
+        <p style="font-size: 12px; color: #666; margin-top: 15px;">
+          <strong>🔒</strong> The backend runs locally on your computer.<br>
+          Your passwords never leave your device.
+        </p>
+
+        <button type="button" class="check-connection-btn" id="checkConnection" tabindex="-1">
+          🔄 Check Connection
+        </button>
+
+        <div id="connectionStatus" class="connection-status"></div>
+      </div>
+
+      <div style="text-align: center; margin-top: 15px;">
+        <a href="https://github.com/idanless/keepassPasswordManagerextension"
+           target="_blank"
+           class="github-link"
+           style="font-size: 12px;">
+          View Full Documentation
+        </a>
+      </div>
+    </div>
+
+    <!-- Unlock Form -->
+    <div id="unlockForm" style="display: none;">
+      <div class="form-group">
+        <label for="dbPath">KeePass Database Path (.kdbx)</label>
+        <input type="text" id="dbPath" placeholder="C:\Users\You\Passwords.kdbx" autocomplete="off">
+        <div style="font-size: 11px; color: #666; margin-top: 3px;">
+          Full path to your database file
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Master Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label for="keyfile">Key File Path (Optional)</label>
+        <input type="text" id="keyfile" placeholder="/path/to/keyfile.key" autocomplete="off">
+      </div>
+
+      <button type="button" id="unlockBtn" tabindex="-1">🔓 Unlock Database</button>
+      <div class="info">
+        <strong>🔒</strong> Your data stays on your machine — no cloud, no tracking.
+      </div>
+    </div>
+
+    <!-- Locked Controls -->
+    <div id="lockedControls" style="display: none;">
+      <div style="text-align: center; margin-bottom: 15px; color: #666; line-height: 1.5;">
+        ✅ Database unlocked and ready!<br>
+        Visit login pages — click the extension icon to auto-fill credentials.
+      </div>
+      <button type="button" class="lock-btn" id="lockBtn" tabindex="-1">🔒 Lock Database</button>
+    </div>
+
+    <!-- Message Area -->
+    <div id="message" class="message" style="display: none;"></div>
+  </div>
+
+  <!-- ✅ Only ONE script tag, no duplicates -->
+  <script src="popup.js"></script>
+</body>
+</html>
