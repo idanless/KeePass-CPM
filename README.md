@@ -22,13 +22,15 @@
 
   <hr />
 
-  <h2>Screenshots (example UI)</h2>
+  <h2>Screenshots</h2>
   <p><!-- Screenshot 1 — login form / extension popup --></p>
-  <img src="screenshots/login_or_popup.png" alt="Login form with KeePass‑CPM button" style="max-width:100%;"/>
+  <img src="screenshots/u1.png" alt="Login form with KeePass‑CPM button" style="max-width:100%;"/>
 
   <p><!-- Screenshot 2 — account selection or multiple‑account list --></p>
-  <img src="screenshots/select_or_list.png" alt="Credential selection popup" style="max-width:100%;"/>
+  <img src="screenshotsu2.png" alt="Credential selection popup" style="max-width:100%;"/>
 
+  <p><!-- Screenshot 2 — account selection or multiple‑account list --></p>
+  <img src="screenshots/u3.png" alt="Credential selection popup" style="max-width:100%;"/>
   <hr />
 
   <h2>Quick Setup (with built-in CA)</h2>
